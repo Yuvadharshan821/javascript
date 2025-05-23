@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Result Portal</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            transition: background 1s, color 1s;
+        }
+
+        .light {
+            background: linear-gradient(-45deg, #fefcea, #f1da36);
+            color: #000;
+        }
+
+        .dark {
+            background: linear-gradient(-45deg, #00c6ff, #0072ff, #8e2de2, #4a00e0);
+            color: white;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            width: 320px;
+            margin: 50px auto;
+        }
+
+        .light .container {
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 90%;
+            padding: 8px;
+            margin: 6px 0;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #00ffcc;
+            color: black;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        #output {
+            margin-top: 20px;
+        }
+
+        .results-list {
+            text-align: left;
+            margin-top: 20px;
+            font-size: 14px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: 2px solid white;
+            border-radius: 50px;
+            padding: 6px 12px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+        }
+
+        .light .theme-toggle {
+            border: 2px solid black;
+            color: black;
+        }
+    </style>
+</head>
+<body class="dark">
+    <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+    <div class="container">
+        <h2>Student Result</h2>
+        <input type="text" id="name" placeholder="Student Name"><br>
+        <input type="number" id="s1" placeholder="Subject 1"><br>
+        <input type="number" id="s2" placeholder="Subject 2"><br>
+        <input type="number" id="s3" placeholder="Subject 3"><br>
+        <input type="number" id="s4" placeholder="Subject 4"><br>
+        <input type="number" id="s5" placeholder="Subject 5"><br>
+        <button onclick="calculateResult()">Submit</button>
+        <button onclick="resetForm()">Reset</button>
+        <button onclick="window.print()">Print Result</button>
+        <div id="output"></div>
+        <div class="results-list" id="resultsList"></div>
+    </div>
+
+    <script>
+        let theme = 'dark';
+
+        function calculateResult() {
+            const name = document.getElementById("name").value;
+            const marks = [
+                parseInt(document.getElementById("s1").value),
+                parseInt(document.getElementById("s2").value),
+                parseInt(document.getElementById("s3").value),
+                parseInt(document.getElementById("s4").value),
+                parseInt(document.getElementById("s5").value)
+            ];
+
+            if (!name || marks.some(isNaN)) {
+                document.getElementById("output").innerHTML = "Please enter all details correctly.";
+                return;
+            }
+
+            const total = marks.reduce((a, b) => a + b, 0);
+            const avg = total / 5;
+            let result = "PASS";
+            let grade = "";
+
+            if (marks.some(m => m < 35)) {
+                result = "FAIL";
+                grade = "No Grade";
+            } else {
+                if (avg >= 75) grade = "A";
+                else if (avg >= 65) grade = "B";
+                else if (avg >= 45) grade = "C";
+                else if (avg >= 36) grade = "D";
+                else {
+                    result = "FAIL";
+                    grade = "No Grade";
+                }
+            }
+
+            const resultText =
+                `<strong>Name:</strong> ${name}<br>
+                 <strong>Average:</strong> ${avg.toFixed(2)}<br>
+                 <strong>Result:</strong> ${result}<br>
+                 <strong>Grade:</strong> ${grade}`;
+
+            document.getElementById("output").innerHTML = resultText;
+
+            const fullRecord = `👨‍🎓 ${name} | Avg: ${avg.toFixed(2)} | Result: ${result} | Grade: ${grade}`;
+            addResultToList(fullRecord);
+        }
+
+        function resetForm() {
+            document.getElementById("name").value = "";
+            document.getElementById("s1").value = "";
+            document.getElementById("s2").value = "";
+            document.getElementById("s3").value = "";
+            document.getElementById("s4").value = "";
+            document.getElementById("s5").value = "";
+            document.getElementById("output").innerHTML = "";
+        }
+
+        function addResultToList(record) {
+            let results = JSON.parse(localStorage.getItem("results") || "[]");
+            results.push(record);
+            localStorage.setItem("results", JSON.stringify(results));
+            renderResults();
+        }
+
+        function renderResults() {
+            const resultsList = document.getElementById("resultsList");
+            const results = JSON.parse(localStorage.getItem("results") || "[]");
+            resultsList.innerHTML = `<strong>Saved Results:</strong><br>` + results.map(r => `• ${r}`).join("<br>");
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            if (theme === 'dark') {
+                body.classList.remove('dark');
+                body.classList.add('light');
+                theme = 'light';
+            } else {
+                body.classList.remove('light');
+                body.classList.add('dark');
+                theme = 'dark';
+            }
+        }
+
+        renderResults();
+    </script>
+</body>
+</html>

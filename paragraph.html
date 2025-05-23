@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Yuva's Page</title>
+        <style>
+            .menu {
+                font-size: 30px;
+                cursor: pointer;
+                position: fixed;
+                top: 10px;
+                right: 10px;
+            }
+
+            .menu-content {
+                display: none;
+                position: fixed;
+                top: 50px;
+                right: 10px;
+                background-color: #f1f1f1;
+                border: 1px solid #ccc;
+                padding: 10px;
+                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                width: 200px;
+            }
+
+            .menu-content button {
+                width: 100%;
+                padding: 10px;
+                margin: 5px 0;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                cursor: pointer;
+            }
+
+            .menu-content button:hover {
+                background-color: #45a049;
+            }
+
+            .menu-content.show {
+                display: block;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 id="text">HELLO YUVA</h1>
+        
+        <div class="menu" onclick="toggleMenu()">&#x2022;&#x2022;&#x2022;</div>
+
+        <div class="menu-content" id="menu">
+            <button onclick="increaseTextSize()">Increase Text Size</button>
+            <button onclick="decreaseTextSize()">Decrease Text Size</button>
+            <button onclick="addBorder()">Add Border</button>
+            <button onclick="removeBorder()">Remove Border</button>
+            <button onclick="changeFontColor()">Change Font Color</button>
+            <button onclick="toggleFontStyle()">Toggle Font Style (Italic)</button>
+            <button onclick="resetStyles()">Reset Styles</button>
+            <button onclick="changeBackgroundColor()">Change Background Color</button>
+            <button onclick="changeTextAlignment()">Change Text Alignment</button>
+            <button onclick="addTextShadow()">Add Text Shadow</button>
+            <button onclick="increaseLineHeight()">Increase Line Height</button>
+            <button onclick="decreaseLineHeight()">Decrease Line Height</button>
+            <button onclick="changeBorderStyle()">Change Border Style</button>
+            <button onclick="hideText()">Hide Text</button>
+            <button onclick="showText()">Show Text</button>
+        </div>
+
+        <script>
+            function toggleMenu() {
+                var menu = document.getElementById("menu");
+                menu.classList.toggle("show");
+            }
+
+            function increaseTextSize() {
+                var text = document.getElementById("text");
+                var currentSize = window.getComputedStyle(text, null).getPropertyValue('font-size');
+                var newSize = parseFloat(currentSize) * 1.2;
+                text.style.fontSize = newSize + 'px';
+            }
+
+            function decreaseTextSize() {
+                var text = document.getElementById("text");
+                var currentSize = window.getComputedStyle(text, null).getPropertyValue('font-size');
+                var newSize = parseFloat(currentSize) / 1.2;
+                text.style.fontSize = newSize + 'px';
+            }
+
+            function addBorder() {
+                var text = document.getElementById("text");
+                text.style.border = "2px solid black";
+            }
+
+            function removeBorder() {
+                var text = document.getElementById("text");
+                text.style.border = "none";
+            }
+
+            function changeFontColor() {
+                var text = document.getElementById("text");
+                text.style.color = "blue"; // Change this to any color you prefer
+            }
+
+            function toggleFontStyle() {
+                var text = document.getElementById("text");
+                if (text.style.fontStyle === "italic") {
+                    text.style.fontStyle = "normal";
+                } else {
+                    text.style.fontStyle = "italic";
+                }
+            }
+
+            function resetStyles() {
+                var text = document.getElementById("text");
+                text.style.fontSize = "";
+                text.style.border = "";
+                text.style.color = "";
+                text.style.fontStyle = "";
+                text.style.backgroundColor = "";
+                text.style.textAlign = "";
+                text.style.textShadow = "";
+                text.style.lineHeight = "";
+            }
+
+            function changeBackgroundColor() {
+                document.body.style.backgroundColor = "#f0f0f0"; // You can change the color here
+            }
+
+            function changeTextAlignment() {
+                var text = document.getElementById("text");
+                if (text.style.textAlign === "center") {
+                    text.style.textAlign = "right";
+                } else if (text.style.textAlign === "right") {
+                    text.style.textAlign = "left";
+                } else {
+                    text.style.textAlign = "center";
+                }
+            }
+
+            function addTextShadow() {
+                var text = document.getElementById("text");
+                text.style.textShadow = "3px 3px 5px rgba(0, 0, 0, 0.3)";
+            }
+
+            function increaseLineHeight() {
+                var text = document.getElementById("text");
+                var currentLineHeight = window.getComputedStyle(text, null).getPropertyValue('line-height');
+                var newLineHeight = parseFloat(currentLineHeight) * 1.2;
+                text.style.lineHeight = newLineHeight + 'px';
+            }
+
+            function decreaseLineHeight() {
+                var text = document.getElementById("text");
+                var currentLineHeight = window.getComputedStyle(text, null).getPropertyValue('line-height');
+                var newLineHeight = parseFloat(currentLineHeight) / 1.2;
+                text.style.lineHeight = newLineHeight + 'px';
+            }
+
+            function changeBorderStyle() {
+                var text = document.getElementById("text");
+                if (text.style.borderStyle === "dashed") {
+                    text.style.borderStyle = "dotted";
+                } else if (text.style.borderStyle === "dotted") {
+                    text.style.borderStyle = "solid";
+                } else {
+                    text.style.borderStyle = "dashed";
+                }
+            }
+
+            function hideText() {
+                var text = document.getElementById("text");
+                text.style.display = "none";
+            }
+
+            function showText() {
+                var text = document.getElementById("text");
+                text.style.display = "block";
+            }
+        </script>
+    </body>
+</html>

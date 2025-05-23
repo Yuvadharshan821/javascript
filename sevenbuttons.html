@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Importance of Days</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #info {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        function displayImportance(day) {
+            let message;
+            switch(day) {
+                case 1:
+                    message = "Monday is the start of the workweek, and it's important for setting goals and productivity.";
+                    break;
+                case 2:
+                    message = "Tuesday is a day to focus and build momentum towards the week's goals.";
+                    break;
+                case 3:
+                    message = "Wednesday, or 'hump day', is crucial for reflection on progress and adjusting tasks.";
+                    break;
+                case 4:
+                    message = "Thursday is great for completing tasks and preparing for the end of the week.";
+                    break;
+                case 5:
+                    message = "Friday is the day to wrap up the week’s work and set a positive tone for the weekend.";
+                    break;
+                case 6:
+                    message = "Saturday is the day to relax, recharge, and spend quality time with family and friends.";
+                    break;
+                case 7:
+                    message = "Sunday is a day for rest and reflection, preparing for the week ahead.";
+                    break;
+                default:
+                    message = "Invalid day.";
+            }
+            document.getElementById("info").innerHTML = message;
+        }
+    </script>
+</head>
+<body>
+
+    <h1>Importance of Days of the Week</h1>
+    
+    <button onclick="displayImportance(1)">Monday</button>
+    <button onclick="displayImportance(2)">Tuesday</button>
+    <button onclick="displayImportance(3)">Wednesday</button>
+    <button onclick="displayImportance(4)">Thursday</button>
+    <button onclick="displayImportance(5)">Friday</button>
+    <button onclick="displayImportance(6)">Saturday</button>
+    <button onclick="displayImportance(7)">Sunday</button>
+    
+    <div id="info"></div>
+
+</body>
+</html>
