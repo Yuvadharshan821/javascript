@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PAN Card Generator (Working)</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  .input-section {
+    max-width: 400px;
+    width: 100%;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+  }
+  .input-section h1 {
+    margin-top: 0;
+    text-align: center;
+    color: #0a3d62;
+  }
+  label {
+    display: block;
+    margin-top: 12px;
+    font-weight: bold;
+  }
+  input[type="text"], input[type="file"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 6px;
+    box-sizing: border-box;
+    font-size: 14px;
+  }
+  button {
+    margin-top: 20px;
+    width: 100%;
+    background-color: #2980b9;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  button:disabled {
+    background-color: #a0a0a0;
+    cursor: not-allowed;
+  }
+  .card {
+    width: 450px;
+    height: 270px;
+    background: linear-gradient(to right, #d3e3fc, #f0f8ff);
+    border: 2px solid #000;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    position: relative;
+    display: none;
+  }
+  .card h2 {
+    margin-top: 0;
+    text-align: center;
+    color: #0a3d62;
+  }
+  .photo {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 90px;
+    height: 110px;
+    border: 1px solid #333;
+    background-color: white;
+    overflow: hidden;
+    border-radius: 4px;
+  }
+  .photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .info {
+    margin-top: 20px;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<div class="input-section">
+  <h1>Enter Details to Generate PAN Card</h1>
+  
+  <label for="candidateName">Candidate Name:</label>
+  <input type="text" id="candidateName" placeholder="Enter Candidate Name" />
+  
+  <label for="fatherName">Father's Name:</label>
+  <input type="text" id="fatherName" placeholder="Enter Father's Name" />
+  
+  <label for="motherName">Mother's Name:</label>
+  <input type="text" id="motherName" placeholder="Enter Mother's Name" />
+  
+  <label for="aadharNumber">Aadhar Number:</label>
+  <input type="text" id="aadharNumber" placeholder="Enter 12-digit Aadhar Number" maxlength="12" />
+  
+  <label for="photoUpload">Upload Photo:</label>
+  <input type="file" id="photoUpload" accept="image/*" />
+  
+  <button id="generateBtn" onclick="generatePAN()" disabled>Generate PAN Card</button>
+</div>
+
+<div class="card" id="panCard">
+  <div class="photo">
+    <img src="" alt="Candidate Photo" id="photoPreview" />
+  </div>
+  <h2>Permanent Account Number (PAN) Card</h2>
+  <div class="info">
+    <strong>Candidate Name:</strong> <span id="displayCandidateName"></span><br />
+    <strong>Father's Name:</strong> <span id="displayFatherName"></span><br />
+    <strong>Mother's Name:</strong> <span id="displayMotherName"></span><br />
+    <strong>Aadhar Number:</strong> <span id="displayAadharNumber"></span><br />
+    <strong>PAN Number:</strong> <span id="displayPANNumber"></span>
+  </div>
+</div>
+
+<script>
+  const candidateName = document.getElementById('candidateName');
+  const fatherName = document.getElementById('fatherName');
+  const motherName = document.getElementById('motherName');
+  const aadharNumber = document.getElementById('aadharNumber');
+  const photoUpload = document.getElementById('photoUpload');
+  const generateBtn = document.getElementById('generateBtn');
+
+  // Validate inputs and toggle button
+  function validateInputs() {
+    const cNameValid = candidateName.value.trim().length >= 4;
+    const fNameValid = fatherName.value.trim().length >= 1;
+    const mNameValid = motherName.value.trim().length >= 1;
+    const aadharValid = /^\d{12}$/.test(aadharNumber.value.trim());
+    const photoValid = photoUpload.files.length > 0;
+
+    // Enable button only if all valid
+    generateBtn.disabled = !(cNameValid && fNameValid && mNameValid && aadharValid && photoValid);
+  }
+
+  candidateName.addEventListener('input', validateInputs);
+  fatherName.addEventListener('input', validateInputs);
+  motherName.addEventListener('input', validateInputs);
+  aadharNumber.addEventListener('input', validateInputs);
+  photoUpload.addEventListener('change', validateInputs);
+
+  function generatePAN() {
+    const cName = candidateName.value.trim();
+    const fName = fatherName.value.trim();
+    const mName = motherName.value.trim();
+    const aadhar = aadharNumber.value.trim();
+
+    // PAN format:
+    // First 3 letters of Candidate Name (uppercase, pad X if less)
+    // First letter of Father’s Name uppercase
+    // Last letter of Mother’s Name uppercase
+    // Last 4 digits of Aadhar
+    let pan = "";
+    pan += cName.slice(0, 3).toUpperCase().padEnd(3, 'X');
+    pan += fName.charAt(0).toUpperCase() || "X";
+    pan += mName.charAt(mName.length - 1).toUpperCase() || "X";
+    pan += aadhar.slice(-4);
+
+    // Set values on card
+    document.getElementById('displayCandidateName').textContent = cName;
+    document.getElementById('displayFatherName').textContent = fName;
+    document.getElementById('displayMotherName').textContent = mName;
+    document.getElementById('displayAadharNumber').textContent = aadhar;
+    document.getElementById('displayPANNumber').textContent = pan;
+
+    // Show photo preview
+    const photoPreview = document.getElementById('photoPreview');
+    const file = photoUpload.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+      photoPreview.src = e.target.result;
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    } else {
+      photoPreview.src = "";
+    }
+
+    // Show card
+    document.getElementById('panCard').style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
